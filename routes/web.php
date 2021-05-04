@@ -17,6 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware('auth:api')->group(function() {
+Route::middleware('auth')->group(function() {
     Route::get('/main', 'MainController@index')->name('main');
 });
