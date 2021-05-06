@@ -19,4 +19,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function() {
     Route::get('/main', 'MainController@index')->name('main');
+    Route::get('/ingredient', 'IngredientController@index')->name('ingredient');
+    Route::post('/ingredient', 'IngredientController@post');
+    Route::put('/ingredient', 'IngredientController@put');
 });
