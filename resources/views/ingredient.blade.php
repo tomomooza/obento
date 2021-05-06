@@ -1,5 +1,21 @@
 @extends('layouts.app')
 
+<script src="/js/app.js"></script>
+<script>
+const ingredients = @json($ingredients_data);
+$(function(){
+  $('#select_ingredient').change(function(){
+    for (let i = 0; i < ingredients.length; i++) {
+      if (ingredients[i]['id'] == $('#select_ingredient').val()) {
+        $('#change_ingredient').val(ingredients[i]['ingredient']);
+        $('#change_category').val(ingredients[i]['category']);
+        break;
+      }
+    }
+  });
+});
+</script>
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -41,8 +57,8 @@
                       <option value="{{ $v['id']}}">{{ $v['ingredient']}}</option>
                       @endforeach
                     </select>
-                    <p>食材名:<input type="text" name="ingredient"></p>
-                    <p>食品目分類:<select name="category">
+                    <p>食材名:<input type="text" name="ingredient" id="change_ingredient"></p>
+                    <p>食品目分類:<select name="category" id="change_category">
                       <option value="糖質">糖質</option>
                       <option value="肉類">肉類</option>
                       <option value="魚類">魚類</option>
@@ -50,7 +66,7 @@
                       <option value="野菜">野菜</option>
                       <option value="果物">果物</option>
                     </select></p>
-                    <p><input type="submit" value="登録ボタン"></p>
+                    <p><input type="submit" value="変更ボタン"></p>
                     </form>
                 </div>
             </div>
