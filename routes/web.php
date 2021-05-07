@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return view('main');
+    } else {
+        return view('welcome');
+    }
 });
 
 Auth::routes();
@@ -22,4 +26,6 @@ Route::middleware('auth')->group(function() {
     Route::get('/ingredient', 'IngredientController@index')->name('ingredient');
     Route::post('/ingredient', 'IngredientController@post');
     Route::put('/ingredient', 'IngredientController@put');
+    Route::get('/season', 'SeasonController@index')->name('season');
+    Route::post('/season', 'SeasonController@post');
 });

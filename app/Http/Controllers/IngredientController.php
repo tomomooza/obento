@@ -12,7 +12,7 @@ class IngredientController extends Controller
     //
     function index() {
         $ingredients_data = [];
-        $ingredients_db = Ingredient::get();
+        $ingredients_db = Ingredient::orderby('category', 'asc')->get();
         foreach($ingredients_db as $v) {
             $ingredient = [];
             $ingredient['id'] = $v->id;
@@ -42,21 +42,13 @@ class IngredientController extends Controller
     }
     function put(Request $request) {
         if ($request->filled('select_ingredient')) {
-            $ingredients_db = Ingredient::where('ingredient', $request->change_ingredient)->first();
-            if ($ingredients_db == NULL) {
-                $form = [];
-                $form['id'] = $request->select_ingredient;
-                $form['ingredient'] = $request->change_ingredient;
-                $form['category'] = $request->change_category;
-                $ingredients_db = new Ingredient;
-                $ingredients_db->fill($form)->save();
-            } else if ($ingredients_db['id'] == $request->select_ingredient) {
-                $form = [];
-                $form['id'] = $request->select_ingredient;
-                $form['ingredient'] = $request->change_ingredient;
-                $form['category'] = $request->change_category;
-                $ingredients_db = new Ingredient;
-                $ingredients_db->fill($form)->save();
+            $ingredients_db = Ingredient::where('ingredient', $request->ingredient)->first();
+            if ($ingredients_db == NULL || $ingredients_db->id == $request->select_ingredient) {
+                $ingredients_db = Ingredient::find($request->select_ingredient);
+                $ingredients_db['ingredient'] = $request->ingredient;
+                $ingredients_db['category'] = $request->category;
+                $ingredients_db->save();
+
             } else {
                 session(['error'=>'食材名が重複しているため変更できません']);
             }
