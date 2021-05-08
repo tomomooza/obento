@@ -34,15 +34,7 @@ $(function(){
       }
     }
   });
-//   $('#select_ingredient').change(function(){
-//     for (let i = 0; i < ingredients.length; i++) {
-//       if (ingredients[i]['id'] == $('#select_ingredient').val()) {
-//         $('#change_ingredient').val(ingredients[i]['ingredient']);
-//         $('#change_category').val(ingredients[i]['category']);
-//         break;
-//       }
-//     }
-//   });
+
 });
 </script>
 
