@@ -20,7 +20,7 @@ $(function(){
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h1>食材登録変更</h1>
+            <h1>食材登録・変更</h1>
             @isset($error)
               <div class="alert alert-danger">{{ $error }}</div>
             @endisset
@@ -71,6 +71,8 @@ $(function(){
                 </div>
             </div>
 
+            <p></p>
+            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class="btn btn-info"></a></div>
         </div>
     </div>
 </div>

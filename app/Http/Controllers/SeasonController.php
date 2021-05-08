@@ -55,9 +55,34 @@ class SeasonController extends Controller
             
             $ingredients_data[] = $ingredient;
         }
-        return view('season', compact('ingredients_data'));
+        $error = session('error');
+        session()->forget('error');
+        return view('season', compact('ingredients_data', 'error'));
     }
     function post(Request $request) {
+        if (!$request->filled('ingredients_id')) {
+            session(['error' => '食材を選択してください']);
+            return redirect()->action('SeasonController@index');
+        }
+
+        $seasons_db = Season::where('user_id', Auth::user()->id)->where('ingredients_id', $request->ingredients_id)->first();
+        if ($seasons_db == NULL) {
+            $seasons_db = new Season;
+            $seasons_db['user_id'] = Auth::user()->id;
+            $seasons_db['ingredients_id'] = $request->ingredients_id;
+        }
+
+        for ($i = 1; $i <= 12; $i++) {
+            $season = 'season' . $i;
+            if ($request->filled($season) == '1') {
+                $seasons_db[$season] = '1';
+            } else {
+                $seasons_db[$season] = '0';
+            }   
+        }
+        $seasons_db['memo'] = $request->memo;
+        $seasons_db->save();
+
         return redirect()->action('SeasonController@index');
     }
 }

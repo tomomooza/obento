@@ -17,8 +17,9 @@ $(function(){
   });
 
   $('#select_ingredient').change(function(){
-    for (let i = 0; i < ingredient_list; i++) {
-      if (ingredient_list[i]['ingredients_id'] == $('#select_ingredient').val()) {
+    $('#ingredients_id').val('');
+    for (let i = 0; i < ingredient_list.length; i++) {
+      if (ingredient_list[i]['id'] == $('#select_ingredient').val()) {
         for (let j = 1; j <= 12; j++) {
           if (ingredient_list[i]['season' + j] == '1') {
             $('#season' + j).prop('checked', true);
@@ -26,7 +27,7 @@ $(function(){
             $('#season' + j).prop('checked', false);
           }
         }
-        $('#memo').text(ingredient_list[i]['memo']);
+        $('#memo').val(ingredient_list[i]['memo']);
         $('#seasons_id').val(ingredient_list[i]['seasons_id']);
         $('#ingredients_id').val(ingredient_list[i]['id']);
         break;
@@ -99,7 +100,8 @@ $(function(){
                     </form>
                 </div>
             </div>
-
+            <p></p>
+            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class="btn btn-info"></a></div>
         </div>
     </div>
 </div>
