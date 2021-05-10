@@ -6,6 +6,75 @@
 <script>
 $(function(){
   $('.abled').prop('disabled', true);
+  $('#add_ingredient').hide();
+
+  $('#bt_change').click(function(){
+    $('.abled').prop('disbled', false);
+    $('#add_ingredient').show();
+    $('#bt_change').prop('disabled', true);
+  });
+
+  const ingredients = @json($ingredients_data);
+  let ingredient_list = [];
+  
+  function make_ingredient_list() {
+    ingredient_list = [];
+    $('#select_ingredient').html('<option value="">選択してください</option>');
+    for (let i = 0; i < ingredients.length; i++) {
+      if (ingredients[i]['category'] == $('#select_category').val()) {
+        if ($('#select_season').prop('selectedIndex') == 0) {
+          ingredient_list.push(ingredients[i]);
+          $('#select_ingredient').append('<option value="' + ingredients[i]['ingredients_id'] + '">' + ingredients[i]['ingredient'] + '</option>');
+        } else {
+          if (ingredients[i][$('#select_season').val()] == '1') {
+            ingredient_list.push(ingredients[i]);
+            $('#select_ingredient').append('<option value="' + ingredients[i]['ingredients_id'] + '">' + ingredients[i]['ingredient'] + '</option>');
+          }
+        }
+      }
+    }
+  }
+
+  function clear_select_ingredient() {
+    for (let j = 1; j <= 12; j++) {
+      $('#display_season' + j).prop('checked', false);
+    }
+    $('#display_memo').val('');
+    $('#display_ingredients_id').val('');
+  }
+
+  function display_select_ingredient() {
+    $('#display_ingredients_id').val('');
+    for (let i =0; i < ingredient_list.length; i++) {
+      if (ingredient_list[i]['ingredients_id'] == $('#select_ingredient').val()) {
+        for (let j = 1; j <= 12; j++) {
+          if (ingredient_list[i]['season' + j] == '1') {
+            $('#display_season' + j).prop('checked', true);
+          } else {
+            $('#display_season' + j).prop('checked', false);
+          }
+        }
+        $('#display_memo').val(ingredient_list[i]['memo']);
+        $('#display_ingredients_id').val(ingredient_list[i]['ingredients_id']);
+        break;
+      }
+    }
+  }
+
+  $('#select_category').change(function() {
+    make_ingredient_list();
+    clear_select_ingredient();
+  });
+
+  $('#select_season').change(function() {
+    make_ingredient_list();
+    clear_select_ingredient();
+  });
+
+  $('#select_ingredient').change(function() {
+    display_select_ingredient();
+  });
+
 });
 </script>
 
