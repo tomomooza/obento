@@ -34,9 +34,12 @@ $(function(){
                     <p>食品目分類:<select name="category">
                       <option value="糖質">糖質</option>
                       <option value="肉類">肉類</option>
-                      <option value="魚類">魚類</option>
+                      <option value="卵類">卵類</option>
+                      <option value="魚介類">魚介類</option>
                       <option value="豆類">豆類</option>
                       <option value="野菜">野菜</option>
+                      <option value="乳製品">乳製品</option>
+                      <option value="加工品">加工品</option>
                       <option value="果物">果物</option>
                     </select></p>
                     <p><input type="submit" value="登録ボタン"></p>
@@ -61,9 +64,12 @@ $(function(){
                     <p>食品目分類:<select name="category" id="change_category">
                       <option value="糖質">糖質</option>
                       <option value="肉類">肉類</option>
-                      <option value="魚類">魚類</option>
+                      <option value="卵類">卵類</option>
+                      <option value="魚介類">魚介類</option>
                       <option value="豆類">豆類</option>
                       <option value="野菜">野菜</option>
+                      <option value="乳製品">乳製品</option>
+                      <option value="加工品">加工品</option>
                       <option value="果物">果物</option>
                     </select></p>
                     <p><input type="submit" value="変更ボタン"></p>

@@ -54,9 +54,12 @@ $(function(){
                       <option value="">選択してください</option>
                       <option value="糖質">糖質</option>
                       <option value="肉類">肉類</option>
-                      <option value="魚類">魚類</option>
+                      <option value="卵類">卵類</option>
+                      <option value="魚介類">魚介類</option>
                       <option value="豆類">豆類</option>
                       <option value="野菜">野菜</option>
+                      <option value="乳製品">乳製品</option>
+                      <option value="加工品">加工品</option>
                       <option value="果物">果物</option>
                     </select></p>
                     <p>

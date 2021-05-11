@@ -80,7 +80,11 @@ class SeasonController extends Controller
                 $seasons_db[$season] = '0';
             }   
         }
-        $seasons_db['memo'] = $request->memo;
+        if ($request->filled('memo')) {
+            $seasons_db['memo'] = $request->memo;
+        } else {
+            $seasons_db['memo'] = '';
+        }
         $seasons_db->save();
 
         return redirect()->action('SeasonController@index');

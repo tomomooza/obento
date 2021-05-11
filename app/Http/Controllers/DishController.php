@@ -53,12 +53,46 @@ class DishController extends Controller
             
             $ingredients_data[] = $ingredient;
         }
-        $error = session('error');
-        session()->forget('error');
-        return view('dish', compact('ingredients_data', 'error'));
+        $errors = session('errors');
+        session()->forget('errors');
+        return view('dish', compact('ingredients_data', 'errors'));
     }
     
     function post(Request $request) {
+        $errors = [];
+        if (!$request->filled('dish_name')) {
+            $errors[] = 'お料理の名前を入力して下さい';
+        }
+
+        if (
+            !$request->filled('white') &&
+            !$request->filled('pink') &&
+            !$request->filled('red') &&
+            !$request->filled('green') &&
+            !$request->filled('yellowish_green') &&
+            !$request->filled('yellow') &&
+            !$request->filled('beige') &&
+            !$request->filled('orange') &&
+            !$request->filled('brown') &&
+            !$request->filled('purple') &&
+            !$request->filled('black')     
+            ) {
+            $errors[] = 'お料理の彩りを入力して下さい';
+        }
+
+        if (!$request->filled('seasoning')) {
+            $errors[] = 'お料理の味付けを入力して下さい';
+        }
+
+        if (!$request->filled('ingredients')) {
+            $errors[] = 'お料理の食材を入力して下さい';
+        }
+
+        if (count($errors) != 0) {
+            session(['errors' => $errors]);
+            return redirect()->action('DishController@index');
+        }
+
         return redirect()->action('DishController@index');
     }
 

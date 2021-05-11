@@ -1,6 +1,8 @@
 @extends('layouts.app')
 <style>
-
+  .p_dishes_ingredients {
+    margin-bottom: 0;
+  }
 </style>
 <script src="/js/app.js"></script>
 <script>
@@ -9,13 +11,15 @@ $(function(){
   $('#add_ingredient').hide();
 
   $('#bt_change').click(function(){
-    $('.abled').prop('disbled', false);
+    $('.abled').prop('disabled', false);
     $('#add_ingredient').show();
     $('#bt_change').prop('disabled', true);
   });
 
   const ingredients = @json($ingredients_data);
   let ingredient_list = [];
+  //  const dishes = json($dishes_data);
+  let dishes_ingredients_list = [];
   
   function make_ingredient_list() {
     ingredient_list = [];
@@ -75,6 +79,55 @@ $(function(){
     display_select_ingredient();
   });
 
+  function make_dishes_list() {
+    $('#selected_ingredients').text('');
+    for (let i = 0; i < dishes_ingredients_list.length; i++) {
+      let li = $('<li>');
+      let e_ingredient = $('<div>');
+      e_ingredient.html(dishes_ingredients_list[i]['ingredient']);
+      let inputd = $('<input type="button" class="float-right">');//input delete
+      inputd.val('この食材を削除する');
+      let inputi = $('<input type="hidden" name="ingredients[]">');
+      inputi.val(dishes_ingredients_list[i]['ingredients_id']);
+      e_ingredient.append(inputd);
+      e_ingredient.append(inputi);
+      let syun = '旬:';
+      for (let j = 1; j <= 12; j++) {
+        if (dishes_ingredients_list[i]['season' + j] == '1') {
+          syun += j + '月 ';
+        }
+      }
+      e_ingredient.append('<p class="p_dishes_ingredients">' + syun + '</p>');
+      e_ingredient.append('<p class="p_dishes_ingredients">食材メモ:' + dishes_ingredients_list[i]['memo'] + '</p>');
+      e_ingredient.append('<hr>');
+      li.append(e_ingredient);
+      $('#selected_ingredients').append(li);
+      inputd.click(function(){
+        dishes_ingredients_list.splice(i, 1);
+        make_dishes_list();
+      });
+    }
+  }
+
+  $('#display_button').click(function(){
+    if ($('#display_ingredients_id').val() == '') {
+      return;
+    }
+    let ingredient;
+    for (let i = 0; i < ingredient_list.length; i++) {
+      if (ingredient_list[i]['ingredients_id'] == $('#display_ingredients_id').val()) {
+        ingredient = ingredient_list[i];
+        break;
+      }
+    }
+    for (let i = 0; i < dishes_ingredients_list.length; i++) {
+      if (dishes_ingredients_list[i]['ingredients_id'] == ingredient ['ingredients_id']) {
+        return;
+      }
+    }
+    dishes_ingredients_list.push(ingredient);
+    make_dishes_list();
+  });
 });
 </script>
 
@@ -83,8 +136,12 @@ $(function(){
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1>お料理登録</h1>
-            @isset($error)
-              <div class="alert alert-danger">{{ $error }}</div>
+            @isset($errors)
+              <div class="alert alert-danger">
+              @foreach($errors as $v)
+              {{ $v }}<br>
+              @endforeach
+              </div>
             @endisset
             <div class="card">
                 <div class="card-header">お料理の検索</div>
@@ -195,9 +252,12 @@ $(function(){
                           <option value="">選択してください</option>
                           <option value="糖質">糖質</option>
                           <option value="肉類">肉類</option>
-                          <option value="魚類">魚類</option>
+                          <option value="卵類">卵類</option>
+                          <option value="魚介類">魚介類</option>
                           <option value="豆類">豆類</option>
                           <option value="野菜">野菜</option>
+                          <option value="乳製品">乳製品</option>
+                          <option value="加工品">加工品</option>
                           <option value="果物">果物</option>
                         </select>
                         旬:
@@ -243,8 +303,8 @@ $(function(){
                       <input type="hidden" id="display_ingredients_id" value="">
                       <p><input type="button" id="display_button" value="上記食材を料理で使う"></p>
                     </div>
-                    <div id="selected_ingredients">
-                    </div>
+                    <ul id="selected_ingredients">
+                    </ul>
                     <p>
                       <p>レシピメモ</p>
                       <p><textarea name="memo" id="seasons_memo" rows="3" cols="40" class="abled"></textarea></p>
@@ -254,7 +314,7 @@ $(function(){
                       <input type="radio" name="public_private" value="1" class="abled">公開
                     </p>
                     <p><input type="button" id="bt_change" value="新規入力・変更"></p>
-                    <p><input type="button" id="bt_submit" value="新規・変更の登録" class="abled"></p>
+                    <p><input type="submit" id="bt_submit" value="新規・変更の登録" class="abled"></p>
                     </form>
                 </div>
             </div>
