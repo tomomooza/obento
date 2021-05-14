@@ -30,6 +30,6 @@ Route::middleware('auth')->group(function() {
     Route::post('/season', 'SeasonController@post');
     Route::get('/dish', 'DishController@index')->name('dish');
     Route::post('/dish', 'DishController@post');
-    Route::get('/ajax/dish', 'Ajax\AjaxDishController@get');
     Route::post('/ajax/dish', 'Ajax\AjaxDishController@post');
+    Route::put('/ajax/dish', 'Ajax\AjaxDishController@put');
 });

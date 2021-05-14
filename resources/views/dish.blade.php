@@ -82,23 +82,24 @@ $(function(){
   function make_dishes_list() {
     $('#selected_ingredients').text('');
     for (let i = 0; i < dishes_ingredients_list.length; i++) {
+      let ingredient = get_ingredients(dishes_ingredients_list[i]);
       let li = $('<li>');
       let e_ingredient = $('<div>');
-      e_ingredient.html(dishes_ingredients_list[i]['ingredient']);
-      let inputd = $('<input type="button" class="float-right">');//input delete
+      e_ingredient.html(ingredient['ingredient']);
+      let inputd = $('<input type="button" class="float-right abled">');//input delete
       inputd.val('この食材を削除する');
       let inputi = $('<input type="hidden" name="ingredients[]">');
-      inputi.val(dishes_ingredients_list[i]['ingredients_id']);
+      inputi.val(ingredient['ingredients_id']);
       e_ingredient.append(inputd);
       e_ingredient.append(inputi);
       let syun = '旬:';
       for (let j = 1; j <= 12; j++) {
-        if (dishes_ingredients_list[i]['season' + j] == '1') {
-          syun += j + '月 ';
+        if (ingredient['season' + j] == '1') {
+          syun += j + '月 ';    
         }
       }
       e_ingredient.append('<p class="p_dishes_ingredients">' + syun + '</p>');
-      e_ingredient.append('<p class="p_dishes_ingredients">食材メモ:' + dishes_ingredients_list[i]['memo'] + '</p>');
+      e_ingredient.append('<p class="p_dishes_ingredients">食材メモ:' + ingredient['memo'] + '</p>');
       e_ingredient.append('<hr>');
       li.append(e_ingredient);
       $('#selected_ingredients').append(li);
@@ -120,13 +121,133 @@ $(function(){
         break;
       }
     }
+    //もし同じIDの食材があったら二重登録しない
     for (let i = 0; i < dishes_ingredients_list.length; i++) {
       if (dishes_ingredients_list[i]['ingredients_id'] == ingredient ['ingredients_id']) {
         return;
       }
     }
-    dishes_ingredients_list.push(ingredient);
+    dishes_ingredients_list.push(ingredient['ingredients_id']);
     make_dishes_list();
+  });
+
+  function get_ingredients(ingredients_id) {
+    for (let i = 0; i < ingredients.length; i++) {
+      if (ingredients[i]['ingredients_id'] == ingredients_id) {
+        return ingredients[i];
+      }
+    }
+    return false;
+  }
+
+  $('#search_dish').click(function(){
+    const formData = $('#search_dish_form').serialize();
+    const param = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      body: formData,
+    }
+    fetch('/ajax/dish', param)
+    .then(response => response.json())
+    .then(result=> {
+      if (result.length == 0) {
+        $('#selection_dish').html('<option value="">検索結果はありませんでした</option>');
+      } else {
+        $('#select_dish').html('<option value="">お料理を選択して下さい</option>');
+        for (let i = 0; i < result.length; i++) {
+          $('#select_dish').append('<option value="' + result[i]['dishes_id'] + '">' + result[i]['dish_name'] + '</option>');
+        }
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  });
+
+  $('#select_dish').change(function(){
+    const formData = $('#select_dish_form').serialize();
+    const param = {
+      method: 'PUT',
+      headers: {
+        'Content-type':'application/x-www-form-urlencoded',
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      body: formData,
+    }
+    fetch('/ajax/dish', param)
+    .then(response => response.json())
+    .then(result => {
+      $('#dish_name').val(result['dish_name']);
+      $('#author_name').text(result['author_name']);
+      if (result['white'] == '1') {
+        $('#white').prop('checked', true);
+      } else {
+        $('#white').prop('checked', false);
+      }
+      if (result['pink'] == '1') {
+        $('#pink').prop('checked', true);
+      } else {
+        $('#pink').prop('checked', false);
+      }
+      if (result['red'] == '1') {
+        $('#red').prop('checked', true);
+      } else {
+        $('#red').prop('checked', false);
+      }
+      if (result['green'] == '1') {
+        $('#green').prop('checked', true);
+      } else {
+        $('#green').prop('checked', false);
+      }
+      if (result['yellowish_green'] == '1') {
+        $('#yellowish_green').prop('checked', true);
+      } else {
+        $('#yellowish_green').prop('checked', false);
+      }
+      if (result['yellow'] == '1') {
+        $('#yellow').prop('checked', true);
+      } else {
+        $('#yellow').prop('checked', false);
+      }
+      if (result['beige'] == '1') {
+        $('#beige').prop('checked', true);
+      } else {
+        $('#beige').prop('checked', false);
+      }
+      if (result['orange'] == '1') {
+        $('#orange').prop('checked', true);
+      } else {
+        $('#orange').prop('checked', false);
+      }
+      if (result['brown'] == '1') {
+        $('#brown').prop('checked', true);
+      } else {
+        $('#brown').prop('checked', false);
+      }
+      if (result['purple'] == '1') {
+        $('#purple').prop('checked', true);
+      } else {
+        $('#purple').prop('checked', false);
+      }
+      if (result['black'] == '1') {
+        $('#black').prop('checked', true);
+      } else {
+        $('#black').prop('checked', false);
+      }
+      $('#seasoning').val(result['seasoning']);
+      $('#dishes_memo').val(result['memo']);
+      $('#dishes_id').val(result['dishes_id']);
+      dishes_ingredients_list = result['manage_ingredients'];
+      make_dishes_list();
+      $('.abled').prop('disabled', true);
+      $('#bt_change').prop('disabled', false);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   });
 });
 </script>
@@ -148,7 +269,7 @@ $(function(){
 
                 <div class="card-body">
                 
-                    <form method="post" action="/ajax/dish">
+                    <form id="search_dish_form">
                     @csrf
                     <p>
                       <input type="radio" name="mydish" value="1" checked="checked">自分のお料理 表示
@@ -313,6 +434,7 @@ $(function(){
                       <input type="radio" name="public_private" value="0" checked="checked" class="abled">非公開
                       <input type="radio" name="public_private" value="1" class="abled">公開
                     </p>
+                    <input type="hidden" name="dishes_id" id="dishes_id" value="">
                     <p><input type="button" id="bt_change" value="新規入力・変更"></p>
                     <p><input type="submit" id="bt_submit" value="新規・変更の登録" class="abled"></p>
                     </form>

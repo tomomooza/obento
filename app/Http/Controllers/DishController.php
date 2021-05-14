@@ -116,7 +116,7 @@ class DishController extends Controller
             if (!($dishes_db == NULL)) {
                 $errors[] = 'お料理名が重複しています。別の名前にしてください。';
                 session(['errors' => $errors]);
-                return redirect()->action('DishContoller@index');
+                return redirect()->action('DishController@index');
             }
             $dishes_db = new Dish;
             $dishes_db['user_id'] = Auth::user()->id;
