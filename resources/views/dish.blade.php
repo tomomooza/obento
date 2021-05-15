@@ -312,7 +312,7 @@ $(function(){
                     </p>
                     <p><input type="button" id="search_dish" value="お料理検索"></p>
                     </form>
-                    <form method="get" action="/ajax/dish">
+                    <form id="select_dish_form">
                       <p>
                         <select name="dishes_id" id="select_dish"></select>
                       </p>
@@ -428,7 +428,7 @@ $(function(){
                     </ul>
                     <p>
                       <p>レシピメモ</p>
-                      <p><textarea name="memo" id="seasons_memo" rows="3" cols="40" class="abled"></textarea></p>
+                      <p><textarea name="memo" id="dishes_memo" rows="3" cols="40" class="abled"></textarea></p>
                     </p>
                     <p>
                       <input type="radio" name="public_private" value="0" checked="checked" class="abled">非公開

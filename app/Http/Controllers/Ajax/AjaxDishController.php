@@ -91,7 +91,7 @@ class AjaxDishController extends Controller
     {
         $dishes_db = Dish::find($request->dishes_id);
         $manage_ingredients_db = Manage_ingredient::where('dishes_id', $dishes_db->id)->get();
-        $manage=ingredient_data = [];
+        $manage_ingredients_data = [];
         foreach ($manage_ingredients_db as $v) {
             $manage_ingredients_data[] = $v['ingredients_id'];
         }
