@@ -9,6 +9,7 @@
 $(function(){
   $('.abled').prop('disabled', true);
   $('#add_ingredient').hide();
+  $('#bt_change_submit').hide();
 
   $('#bt_change').click(function(){
     $('.abled').prop('disabled', false);
@@ -18,7 +19,6 @@ $(function(){
 
   const ingredients = @json($ingredients_data);
   let ingredient_list = [];
-  //  const dishes = json($dishes_data);
   let dishes_ingredients_list = [];
   
   function make_ingredient_list() {
@@ -239,6 +239,14 @@ $(function(){
       }
       $('#seasoning').val(result['seasoning']);
       $('#dishes_memo').val(result['memo']);
+      if (result['mydish'] == '1') {
+        if (result['public_private'] == '1') {
+          $('input[name=public_private]:eq(1)').prop('checked', true);
+        }
+        $('#bt_change_submit').show();
+      } else {
+        $('#bt_change_submit').hide();
+      }
       $('#dishes_id').val(result['dishes_id']);
       dishes_ingredients_list = result['manage_ingredients'];
       make_dishes_list();
@@ -249,6 +257,17 @@ $(function(){
       console.error('Error:', error);
     });
   });
+
+  $('#bt_new_submit').click(function(){
+    $('#new_change').val('new');
+    $('#dish_post').submit();
+  });
+
+  $('#bt_change_submit').click(function(){
+    $('#new_change').val('change');
+    $('#dish_post').submit();
+  });
+
 });
 </script>
 
@@ -325,7 +344,7 @@ $(function(){
                 <div class="card-header">お料理の表示・登録</div>
 
                 <div class="card-body">
-                    <form method="post" action="/dish">
+                    <form method="post" action="/dish" id="dish_post">
                     @csrf
                     <p>
                       お料理名:<input type="text" name="dish_name" id="dish_name" class="abled">
@@ -435,8 +454,12 @@ $(function(){
                       <input type="radio" name="public_private" value="1" class="abled">公開
                     </p>
                     <input type="hidden" name="dishes_id" id="dishes_id" value="">
+                    <input type="hidden" name="new_change" id="new_change" value="">
                     <p><input type="button" id="bt_change" value="新規入力・変更"></p>
-                    <p><input type="submit" id="bt_submit" value="新規・変更の登録" class="abled"></p>
+                    <p>
+                      <input type="button" id="bt_new_submit" value="新規の登録" class="abled">
+                      <input type="button" id="bt_change_submit" value="変更の登録" class="abled">
+                    </p>
                     </form>
                 </div>
             </div>

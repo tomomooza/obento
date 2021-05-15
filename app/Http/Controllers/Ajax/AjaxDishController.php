@@ -109,6 +109,7 @@ class AjaxDishController extends Controller
         $dishes_data['dish_name'] = $dishes_db->dish_name;
         $dishes_data['seasoning'] = $dishes_db->seasoning;
         $dishes_data['memo'] = $dishes_db->memo;
+        $dishes_data['public_private'] = $dishes_db->public_private;
         $dishes_data['white'] = $dishes_db->white;
         $dishes_data['pink'] = $dishes_db->pink;
         $dishes_data['red'] = $dishes_db->red;

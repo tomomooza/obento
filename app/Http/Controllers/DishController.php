@@ -91,19 +91,27 @@ class DishController extends Controller
             $errors[] = 'お料理の食材を入力して下さい';
         }
 
+        if (!$request->filled('new_change')) {
+            $errors[] = 'システムエラーです。管理者にお問い合わせ下さい';
+        } else {
+            if(!($request->new_change == 'new' || $request->new_change == 'change')) {
+                $errors[] = 'システムエラーです。管理者にお問い合わせ下さい';
+            }
+        }
+
         if (count($errors) != 0) {
             session(['errors' => $errors]);
             return redirect()->action('DishController@index');
         }
 
         //他人のお料理を検索した場合ー＞新規登録になる。
-        //自分のお料理を検索した場合ー＞変更になる。
+        //自分のお料理を検索した場合ー＞新規と変更を選べる。
         //検索せずに、新規入力した場合ー＞新規登録になる。
         //自分のお料理に関しては、料理名の重複は不可とする。
-        if ($request->filled('dishes_id')) {
+        if ($request->filled('dishes_id') && $request->new_change == 'change') {
             //更新
             $dishes_db = Dish::where('user_id', Auth::user()->id)->where('dish_name', $request->dish_name)->first();
-            if ($dishes_db->id !=$request->dishes_id) {
+            if (!($dishes_db == NULL) && $dishes_db->id !=$request->dishes_id) {
                 $errors[] = 'お料理名が重複しています。別の名前にしてください';
                 session(['errors' =>$errors]);
                 return redirect()->action('DishController@index');

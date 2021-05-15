@@ -32,4 +32,7 @@ Route::middleware('auth')->group(function() {
     Route::post('/dish', 'DishController@post');
     Route::post('/ajax/dish', 'Ajax\AjaxDishController@post');
     Route::put('/ajax/dish', 'Ajax\AjaxDishController@put');
+    Route::get('/obento', 'ObentoController@index')->name('obento');
+    Route::post('/obento', 'ObentoController@post');
+    Route::get('/menu', 'MenuController@index')->name('menu');
 });
