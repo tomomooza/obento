@@ -3,12 +3,26 @@
   .p_dishes_ingredients {
     margin-bottom: 0;
   }
+  .pic {
+    height: 180px;
+  }
 </style>
 <script src="/js/app.js"></script>
 <script>
 $(function(){
+  let dishes_list = [];
+
   $('.abled').prop('disabled', true);
   $('#selected_dish').hide();
+
+  $('#image').on('change', function(e){
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      $('#pic').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+    $('#pic').addClass('pic');
+  });
 
   const ingredients = @json($ingredients_data);
   let ingredient_list = [];
@@ -198,7 +212,7 @@ $(function(){
       } else {
         $('#bt_change_submit').hide();
       }
-      $('#dishes_id').val(result['dishes_id']);
+      $('#selected_dishes_id').val(result['dishes_id']);
       dishes_ingredients_list = result['manage_ingredients'];
       make_dishes_list();
       $('.abled').prop('disabled', true);
@@ -208,6 +222,10 @@ $(function(){
     .catch((error) => {
       console.error('Error:', error);
     });
+  });
+
+  $('#bt_add_dish').click(function(){
+
   });
 });
 </script>
@@ -225,6 +243,51 @@ $(function(){
               </div>
             @endisset
             <div class="card">
+                <div class="card-header">お弁当の登録</div>
+
+                <div class="card-body">
+                  <form action="/obento" method="POST" enctype="multipart/form-data">
+                  @csrf
+                    <p>お弁当の日付:<input type="date" name="obento_date" id="obento_date"></p>
+                    <p>
+                      <p>色合い</p>
+                      <p>
+                          <input type="checkbox" disabled="disabled" name="white" id="obento_white" value="1">白
+                          <input type="checkbox" disabled="disabled" name="pink" id="obento_pink" value="1">桃色
+                          <input type="checkbox" disabled="disabled" name="red" id="obento_red" value="1">赤
+                          <input type="checkbox" disabled="disabled" name="green" id="obento_green" value="1">緑
+                          <input type="checkbox" disabled="disabled" name="yellowish_green" id="obento_yellowish_green" value="1">黄緑
+                          <input type="checkbox" disabled="disabled" name="yellow" id="obento_yellow" value="1">黄色
+                          </p>
+                          <p>
+                          <input type="checkbox" disabled="disabled" name="beige" id="obento_beige" value="1">薄橙色(肌色)
+                          <input type="checkbox" disabled="disabled" name="orange" id="obento_orange" value="1">橙色
+                          <input type="checkbox" disabled="disabled" name="brown" id="obento_brown" value="1">茶
+                          <input type="checkbox" disabled="disabled" name="purple" id="obento_purple" value="1">紫
+                          <input type="checkbox" disabled="disabled" name="black" id="obento_black" value="1">黒
+                        </p>
+                    </p>
+                    <p>
+                      <p>お料理</p>
+                      <ul id="obento_dish"></ul>
+                    </p>
+                    <p>
+                      <p>写真<input type="file" name="image" id="image" accept="image/png, image/jpeg"></p>
+                      <div><img id="pic"></div>
+                    </p>
+                    <p>
+                      <p>お弁当メモ</p>
+                      <p><textarea name="obento_memo" rows="3" cols="40" ></textarea></p>
+                    </p>
+                    <p><input type="submit" value="このお弁当をメニューに登録する"></p>
+                  </form>
+                </div>
+            </div>
+
+            <p></p>
+
+            <div class="card">
+            
                 <div class="card-header">お料理の検索</div>
 
                 <div class="card-body">
@@ -322,10 +385,10 @@ $(function(){
                     </ul>
                     <p>
                       <p>レシピメモ</p>
-                      <p><textarea name="memo" id="dishes_memo" rows="3" cols="40" class="abled"></textarea></p>
+                      <p><textarea id="dishes_memo" rows="3" cols="40" class="abled"></textarea></p>
                     </p>
                     
-                    <input type="hidden" name="dishes_id" id="dishes_id" value="">
+                    <input type="hidden" id="selected_dishes_id" value="">
                     </div>
                 </div>
             </div>

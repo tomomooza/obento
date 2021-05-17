@@ -58,4 +58,20 @@ class ObentoController extends Controller
         session()->forget('errors');
         return view('obento', compact('ingredients_data', 'errors'));
     }
+    
+    function post(Request $request) {
+        $errors = [];
+        if (!$request->filled('obento_date')) {
+            $errors[] = 'お弁当の日付を入力してください';
+        }
+        if (!$request->filled('dishes')) {
+            $errors[] = 'お料理を登録してください';
+        }
+        if (count($errors) != 0) {
+            session(['errors' => $errors]);
+            return redirect()->action('ObentoController@index');
+        }
+        return redirect()->action('ObentoController@index');
+    }
+
 }
