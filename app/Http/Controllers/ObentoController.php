@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Ingredient;
 use App\Season;
+use App\Obento;
+use App\Manage_dish;
+use Illuminate\Support\Facades\DB;
 
 class ObentoController extends Controller
 {
@@ -80,8 +83,49 @@ class ObentoController extends Controller
             return redirect()->action('ObentoController@index');
         }
 
-        
+        $obentos_db = Obento::where('user_id', Auth::user()->id)->where('obento_date', $request->obento_date)->first();
+        if ($obentos_db == NULL) {
+            $obentos_db = new Obento;
+            $obentos_db['user_id'] = Auth::user()->id;
+            $obentos_db['obento_date'] = $request->obento_date;
+        }
 
+        if ($request->filled('obento_memo')) {
+            $obentos_db['memo'] = $request->obento_memo;
+        } else {
+            $obentos_db['memo'] = '';
+        }
+
+        //画像のアップロード
+        $obentos_db['photo'] = '';
+        $upload_image = $request->file('image');
+        if ($upload_image) {
+            //アップロードされた画像を保存する
+            $path = $upload_image->store('public/img/' .Auth::user()->id);
+            //画像の保存に成功したらDBに記録する
+            if($path) {
+                $obentos_db['photo'] = $path;
+            }
+        }
+
+        DB::beginTransaction();
+        try {
+            $obentos_db->save();
+            Manage_dish::where('obentos_id', $obentos_db->id)->delete();
+            foreach ($request->dishes_id as $v) {
+                $manage_dishes_db = new Manage_dish;
+                $manage_dishes_db['obentos_id'] = $obentos_db->id;
+                $manage_dishes_db['dishes_id'] = $v;
+                $manage_dishes_db->save();
+            }
+            DB::commit();
+            $errors[] = 'お弁当の登録をしました';
+        } catch (\Exception $e) {
+            DB::rollback();
+            $errors[] = 'データ更新でエラーが発生しました。管理者にお問い合わせ下さい';
+        }
+
+        session(['errors' => $errors]);
         return redirect()->action('ObentoController@index');
     }
 
