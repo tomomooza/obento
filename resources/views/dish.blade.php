@@ -465,7 +465,7 @@ $(function(){
             </div>
             <p></p>
             
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class="btn btn-info"></a></div>
+            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>

@@ -10,10 +10,28 @@
 <script src="/js/app.js"></script>
 <script>
 $(function(){
-  let dishes_list = [];
-
+  const ingredients = @json($ingredients_data);
+  let ingredient_list = [];//食材一覧
+  let dishes_ingredients_list = [];//お料理で使われている食材の一覧
+  let dishes_list = [];//お弁当で使われているお料理の一覧
+  let obento_date = @json($obento_date);
+  const colors = [
+    'white',
+    'pink',
+    'red',
+    'green',
+    'yellowish_green',
+    'yellow',
+    'beige',
+    'orange',
+    'brown',
+    'purple',
+    'black',
+  ];
   $('.abled').prop('disabled', true);
   $('#selected_dish').hide();
+
+  $('#obento_date').val(obento_date);
 
   $('#image').on('change', function(e){
     let reader = new FileReader();
@@ -24,10 +42,56 @@ $(function(){
     $('#pic').addClass('pic');
   });
 
-  const ingredients = @json($ingredients_data);
-  let ingredient_list = [];
-  let dishes_ingredients_list = [];
-  
+  function display_dishes() {
+    for (let i = 0; i < colors.length; i++) {
+      $('#obento_' + colors[i]).prop('checked', false);
+    }
+    for (let i = 0; i < dishes_list.length; i++) {
+      for (let j = 0; j < colors.length; j++) {
+        if (dishes_list[i][colors[j]]) {
+          $('#obento_' + colors[j]).prop('checked', true);
+        }
+      }
+    }
+    $('#obento_dish').html('');
+    for (let i = 0; i < dishes_list.length; i++) {
+      $('#obento_dish').append(
+        '<div class="row">' +
+        '<div class="col">' + dishes_list[i]['dish_name'] + '</div>' +
+        '<div class="col">' + dishes_list[i]['seasoning'] + '</div>' +
+        '<div class="col-2">' +
+        '<input type="button" id="delete_dish_' + dishes_list[i]['dishes_id'] + '" value="削除">' +
+        '<input type="hidden" name="dishes_id[]" value="' + dishes_list[i]['dishes_id'] + '" >' + 
+        '</div>'
+      );
+      $('#delete_dish_' + dishes_list[i]['dishes_id']).click(function(){
+        dishes_list.splice(i, 1);
+        display_dishes();
+      });
+    }
+  }
+
+  function add_dishes_list($dish) {
+    for (let i = 0; i < dishes_list.length; i++) {
+      if (dishes_list[i]['dishes_id'] == $dish['dishes_id']) {
+        return;
+      }
+    }
+    dishes_list.push($dish);
+  }
+
+  $('#bt_add_dish').click(function() {
+    let $dish = [];
+    $dish['dishes_id'] = $('#selected_dishes_id').val();
+    $dish['dish_name'] = $('#dish_name').val();
+    $dish['seasoning'] = $('#seasoning').val();
+    for (let i = 0; i < colors.length; i++) {
+      $dish[colors[i]] = $('#' + colors[i]).prop('checked');
+    }
+    add_dishes_list($dish);
+    display_dishes();
+  });
+
   function make_ingredient_list() {
     ingredient_list = [];
     $('#select_ingredient').html('<option value="">選択してください</option>');
@@ -269,7 +333,7 @@ $(function(){
                     </p>
                     <p>
                       <p>お料理</p>
-                      <ul id="obento_dish"></ul>
+                      <div id="obento_dish"></div>
                     </p>
                     <p>
                       <p>写真<input type="file" name="image" id="image" accept="image/png, image/jpeg"></p>
@@ -343,30 +407,30 @@ $(function(){
                     <hr>
                     <p><input type="button" id="bt_add_dish" value="このお料理をお弁当に使う"></p>
                     <p>
-                      お料理名:<input type="text" name="dish_name" id="dish_name" class="abled">
+                      お料理名:<input type="text" name="dish_name" id="dish_name" disabled="disabled">
                     </p>
                     <p>
                       <p>お料理の彩り</p>
                       <p>
-                      <input type="checkbox" name="white" id="white" value="1" class="abled">白
-                      <input type="checkbox" name="pink" id="pink" value="1" class="abled">桃色
-                      <input type="checkbox" name="red" id="red" value="1" class="abled">赤
-                      <input type="checkbox" name="green" id="green" value="1" class="abled">緑
-                      <input type="checkbox" name="yellowish_green" id="yellowish_green" value="1" class="abled">黄緑
-                      <input type="checkbox" name="yellow" id="yellow" value="1" class="abled">黄色
+                      <input type="checkbox" name="white" id="white" value="1" disabled="disabled">白
+                      <input type="checkbox" name="pink" id="pink" value="1" disabled="disabled">桃色
+                      <input type="checkbox" name="red" id="red" value="1" disabled="disabled">赤
+                      <input type="checkbox" name="green" id="green" value="1" disabled="disabled">緑
+                      <input type="checkbox" name="yellowish_green" id="yellowish_green" value="1" disabled="disabled">黄緑
+                      <input type="checkbox" name="yellow" id="yellow" value="1" disabled="disabled">黄色
                       </p>
                       <p>
-                      <input type="checkbox" name="beige" id="beige" value="1" class="abled">薄橙色(肌色)
-                      <input type="checkbox" name="orange" id="orange" value="1" class="abled">橙色
-                      <input type="checkbox" name="brown" id="brown" value="1" class="abled">茶
-                      <input type="checkbox" name="purple" id="purple" value="1" class="abled">紫
-                      <input type="checkbox" name="black" id="black" value="1" class="abled">黒
+                      <input type="checkbox" name="beige" id="beige" value="1" disabled="disabled">薄橙色(肌色)
+                      <input type="checkbox" name="orange" id="orange" value="1" disabled="disabled">橙色
+                      <input type="checkbox" name="brown" id="brown" value="1" disabled="disabled">茶
+                      <input type="checkbox" name="purple" id="purple" value="1" disabled="disabled">紫
+                      <input type="checkbox" name="black" id="black" value="1" disabled="disabled">黒
                     </p>
                     </p>
                     <p>
                       <p>お料理の味付け</p>
                       <p>
-                        <select name="seasoning" id="seasoning" class="abled">
+                        <select name="seasoning" id="seasoning" disabled="disabled">
                           <option value="">選択</option>
                           <option value="素材の味">素材の味</option>
                           <option value="塩味">塩味</option>
@@ -385,7 +449,7 @@ $(function(){
                     </ul>
                     <p>
                       <p>レシピメモ</p>
-                      <p><textarea id="dishes_memo" rows="3" cols="40" class="abled"></textarea></p>
+                      <p><textarea id="dishes_memo" rows="3" cols="40" disabled="disabled"></textarea></p>
                     </p>
                     
                     <input type="hidden" id="selected_dishes_id" value="">
@@ -394,7 +458,7 @@ $(function(){
             </div>
             <p></p>
             
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class="btn btn-info"></a></div>
+            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>

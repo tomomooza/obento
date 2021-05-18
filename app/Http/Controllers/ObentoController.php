@@ -56,7 +56,14 @@ class ObentoController extends Controller
         }
         $errors = session('errors');
         session()->forget('errors');
-        return view('obento', compact('ingredients_data', 'errors'));
+
+        $obento_date = session('obento_date');
+        session()->forget('obento_date');
+        if ($obento_date == NULL) {
+            $obento_date = date('Y-m-d');
+        } 
+
+        return view('obento', compact('ingredients_data', 'errors', 'obento_date'));
     }
     
     function post(Request $request) {
@@ -64,13 +71,17 @@ class ObentoController extends Controller
         if (!$request->filled('obento_date')) {
             $errors[] = 'お弁当の日付を入力してください';
         }
-        if (!$request->filled('dishes')) {
+        session(['obento_date' => $request->obento_date]);
+        if (!$request->filled('dishes_id')) {
             $errors[] = 'お料理を登録してください';
         }
         if (count($errors) != 0) {
             session(['errors' => $errors]);
             return redirect()->action('ObentoController@index');
         }
+
+        
+
         return redirect()->action('ObentoController@index');
     }
 
