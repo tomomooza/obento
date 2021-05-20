@@ -88,6 +88,7 @@ class ObentoController extends Controller
             $obentos_db = new Obento;
             $obentos_db['user_id'] = Auth::user()->id;
             $obentos_db['obento_date'] = $request->obento_date;
+            $obentos_db['photo'] = '';
         }
 
         if ($request->filled('obento_memo')) {
@@ -97,14 +98,17 @@ class ObentoController extends Controller
         }
 
         //画像のアップロード
-        $obentos_db['photo'] = '';
         $upload_image = $request->file('image');
         if ($upload_image) {
+            //画像サイズを縦180pxにリサイズする。
+            $upload_image->resize(null, 180, function($constraint){
+                $constraint->aspectRatio();
+            });
             //アップロードされた画像を保存する
-            $path = $upload_image->store('/storage/img/' .Auth::user()->id);
+            $path = $upload_image->store('public/img/' .Auth::user()->id);
             //画像の保存に成功したらDBに記録する
             if($path) {
-                $obentos_db['photo'] = $path;
+                $obentos_db['photo'] = str_replace('public/', 'storage/', $path);
             }
         }
 

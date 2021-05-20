@@ -3,7 +3,7 @@
   .p_dishes_ingredients {
     margin-bottom: 0;
   }
-  .pic {
+  #pic {
     height: 180px;
   }
 </style>
@@ -72,7 +72,6 @@ $(function(){
       $('#pic').attr('src', e.target.result);
     }
     reader.readAsDataURL(e.target.files[0]);
-    $('#pic').addClass('pic');
   });
 
   function display_dishes() {
