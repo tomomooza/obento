@@ -35,4 +35,5 @@ Route::middleware('auth')->group(function() {
     Route::get('/obento', 'ObentoController@index')->name('obento');
     Route::post('/obento', 'ObentoController@post');
     Route::get('/menu', 'MenuController@index')->name('menu');
+    Route::post('/ajax/obento', 'Ajax\AjaxObentoController@post');
 });

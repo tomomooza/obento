@@ -101,7 +101,7 @@ class ObentoController extends Controller
         $upload_image = $request->file('image');
         if ($upload_image) {
             //アップロードされた画像を保存する
-            $path = $upload_image->store('public/img/' .Auth::user()->id);
+            $path = $upload_image->store('/storage/img/' .Auth::user()->id);
             //画像の保存に成功したらDBに記録する
             if($path) {
                 $obentos_db['photo'] = $path;

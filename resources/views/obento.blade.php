@@ -30,8 +30,41 @@ $(function(){
   ];
   $('.abled').prop('disabled', true);
   $('#selected_dish').hide();
-
+  $('#hidden_date').val(obento_date);
   $('#obento_date').val(obento_date);
+  get_obento_data();
+
+  function get_obento_data() {
+    const formData = $('#obentos_date_form').serialize();
+    const param = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      body: formData,
+    }
+    fetch('/ajax/obento', param)
+    .then(response => response.json())
+    .then(result =>{
+      console.log(result);
+      dishes_list = [];
+      for (let i = 0; i < result['dishes'].length; i++) {
+        add_dishes_list(result['dishes'][i]);
+      }
+      display_dishes();
+      $('#pic').attr('src', result['photo']);
+      $('#obento_memo').text(result['memo']);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  $('#obento_date').change(function(){
+    $('#hidden_date').val($(this).val());
+    get_obento_data();
+  });
 
   $('#image').on('change', function(e){
     let reader = new FileReader();
@@ -310,6 +343,9 @@ $(function(){
                 <div class="card-header">お弁当の登録</div>
 
                 <div class="card-body">
+                  <form id="obentos_date_form">
+                    <input type="hidden" id="hidden_date" name="obento_date" value="">
+                  </form>
                   <form action="/obento" method="POST" enctype="multipart/form-data">
                   @csrf
                     <p>お弁当の日付:<input type="date" name="obento_date" id="obento_date"></p>
@@ -341,7 +377,7 @@ $(function(){
                     </p>
                     <p>
                       <p>お弁当メモ</p>
-                      <p><textarea name="obento_memo" rows="3" cols="40" ></textarea></p>
+                      <p><textarea name="obento_memo" id="obento_memo" rows="3" cols="40" ></textarea></p>
                     </p>
                     <p><input type="submit" value="このお弁当をメニューに登録する"></p>
                   </form>
