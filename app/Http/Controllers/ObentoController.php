@@ -9,6 +9,7 @@ use App\Season;
 use App\Obento;
 use App\Manage_dish;
 use Illuminate\Support\Facades\DB;
+use InterventionImage;
 
 class ObentoController extends Controller
 {
@@ -101,14 +102,17 @@ class ObentoController extends Controller
         $upload_image = $request->file('image');
         if ($upload_image) {
             //画像サイズを縦180pxにリサイズする。
-            $upload_image->resize(null, 180, function($constraint){
+            $resize = InterventionImage::make($upload_image)->resize(null, 180, function($constraint){
                 $constraint->aspectRatio();
-            });
+            })->encode('jpg');
+
+            $filename = md5($request->obento_date . $resize->__toString());
+            $path = 'img/' . Auth::user()->id . '/' . $filename . '.jpg';
             //アップロードされた画像を保存する
-            $path = $upload_image->store('public/img/' .Auth::user()->id);
+            $filesave = $resize->save(storage_path('app/public/' . $path));
             //画像の保存に成功したらDBに記録する
-            if($path) {
-                $obentos_db['photo'] = str_replace('public/', 'storage/', $path);
+            if($filesave) {
+                $obentos_db['photo'] = 'storage/' . $path;
             }
         }
 
