@@ -11,13 +11,18 @@
 <script>
 $(function(){
   const obentos = @json($obentos_data);
-  console.log(obentos);
-  const start_year = 2021;
+  const year = @json($year);
+  const month = @json($month);
+  
+  const start_year = 2000;
   const end_year = (new Date()).getFullYear();
   for (let i = start_year; i <= end_year; i++) {
     $('#year').append('<option value="'+i+'">' + i + '</option>');
   }
-  $('#year option:last').prop('selected', true);
+  $('select#year option[value="'+year+'"]').prop('selected', true);
+  $('select#month option[value="'+month+'"]').prop('selected', true);
+
+
 });
 </script>
 
@@ -35,19 +40,20 @@ $(function(){
             @endisset
 
             <div>
-              <form action="/menu" method="post"></form>
+              <form action="/menu" method="post">
+                @csrf
                 年月を選択して下さい:
                 <select id="year" name="year"></select>年　
                 <select id="month" name="month">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
+                  <option value="01">1</option>
+                  <option value="02">2</option>
+                  <option value="03">3</option>
+                  <option value="04">4</option>
+                  <option value="05">5</option>
+                  <option value="06">6</option>
+                  <option value="07">7</option>
+                  <option value="08">8</option>
+                  <option value="09">9</option>
                   <option value="10">10</option>
                   <option value="11">11</option>
                   <option value="12">12</option>
@@ -56,29 +62,50 @@ $(function(){
               </form>
             </div>
 
+            @foreach($obentos_data as $obento)
+            <p></p>
             <div class="card">
                 <div class="card-header">お弁当の登録</div>
 
                 <div class="card-body">
                   
-                    <p>お弁当の日付:<span></span></p>
+                    <p>お弁当の日付:　<span>{{date('Y年n月j日', strtotime($obento['obento_date']))}}</span></p>
                     <p>
                       <p>色合い</p>
                       <p>
-                          <input type="checkbox" disabled="disabled" name="white" id="obento_white" value="1">白
-                          <input type="checkbox" disabled="disabled" name="pink" id="obento_pink" value="1">桃色
-                          <input type="checkbox" disabled="disabled" name="red" id="obento_red" value="1">赤
-                          <input type="checkbox" disabled="disabled" name="green" id="obento_green" value="1">緑
-                          <input type="checkbox" disabled="disabled" name="yellowish_green" id="obento_yellowish_green" value="1">黄緑
-                          <input type="checkbox" disabled="disabled" name="yellow" id="obento_yellow" value="1">黄色
-                          </p>
-                          <p>
-                          <input type="checkbox" disabled="disabled" name="beige" id="obento_beige" value="1">薄橙色(肌色)
-                          <input type="checkbox" disabled="disabled" name="orange" id="obento_orange" value="1">橙色
-                          <input type="checkbox" disabled="disabled" name="brown" id="obento_brown" value="1">茶
-                          <input type="checkbox" disabled="disabled" name="purple" id="obento_purple" value="1">紫
-                          <input type="checkbox" disabled="disabled" name="black" id="obento_black" value="1">黒
-                        </p>
+                          @if ($obento['white'] == 1) 
+                            白　
+                          @endif
+                          @if ($obento['pink'] == 1) 
+                            桃色　
+                          @endif
+                          @if ($obento['red'] == 1) 
+                            赤　
+                          @endif
+                          @if ($obento['green'] == 1) 
+                            緑　
+                          @endif
+                          @if ($obento['yellowish_green'] == 1) 
+                            黄緑　
+                          @endif
+                          @if ($obento['yellow'] == 1) 
+                            黄　
+                          @endif
+                          @if ($obento['beige'] == 1) 
+                            薄橙色　
+                          @endif
+                          @if ($obento['orange'] == 1) 
+                            橙色　
+                          @endif
+                          @if ($obento['brown'] == 1) 
+                            茶　
+                          @endif
+                          @if ($obento['purple'] == 1) 
+                            紫　
+                          @endif
+                          @if ($obento['black'] == 1) 
+                            黒　
+                          @endif    
                     </p>
                     <p>
                       <p>お料理</p>
@@ -94,7 +121,7 @@ $(function(){
                     </p>
                 </div>
             </div>
-
+            @endforeach
             <p></p>
 
             <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
