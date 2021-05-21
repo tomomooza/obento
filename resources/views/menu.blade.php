@@ -9,7 +9,16 @@
 </style>
 <script src="/js/app.js"></script>
 <script>
-
+$(function(){
+  const obentos = @json($obentos_data);
+  console.log(obentos);
+  const start_year = 2021;
+  const end_year = (new Date()).getFullYear();
+  for (let i = start_year; i <= end_year; i++) {
+    $('#year').append('<option value="'+i+'">' + i + '</option>');
+  }
+  $('#year option:last').prop('selected', true);
+});
 </script>
 
 @section('content')
@@ -24,6 +33,29 @@
               @endforeach
               </div>
             @endisset
+
+            <div>
+              <form action="/menu" method="post"></form>
+                年月を選択して下さい:
+                <select id="year" name="year"></select>年　
+                <select id="month" name="month">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>月　
+                <input type="submit" value="検索">
+              </form>
+            </div>
+
             <div class="card">
                 <div class="card-header">お弁当の登録</div>
 

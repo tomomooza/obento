@@ -3,7 +3,7 @@
   .p_dishes_ingredients {
     margin-bottom: 0;
   }
-  #pic {
+  .pic {
     height: 180px;
   }
 </style>
@@ -53,7 +53,14 @@ $(function(){
         add_dishes_list(result['dishes'][i]);
       }
       display_dishes();
-      $('#pic').attr('src', result['photo']);
+      if (result['photo']!= '') {
+        $('#pic').attr('src', result['photo']);
+        $('#pic').addClass('pic');
+      } else {
+        $('#pic').attr('src', '');
+        $('#pic').removeClass('pic');
+      }
+      
       $('#obento_memo').text(result['memo']);
     })
     .catch((error) => {
@@ -70,6 +77,7 @@ $(function(){
     let reader = new FileReader();
     reader.onload = function(e) {
       $('#pic').attr('src', e.target.result);
+      $('#pic').addClass('pic');
     }
     reader.readAsDataURL(e.target.files[0]);
   });
