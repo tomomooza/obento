@@ -98,8 +98,8 @@ $(function(){
   const year = @json($year);
   const month = @json($month);
   
-  const start_year = 2000;
-  const end_year = (new Date()).getFullYear();
+  const start_year = 2021;
+  const end_year = (new Date()).getFullYear() + 1;
   for (let i = start_year; i <= end_year; i++) {
     $('#year').append('<option value="'+i+'">' + i + '</option>');
   }

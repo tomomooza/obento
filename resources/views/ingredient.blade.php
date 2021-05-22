@@ -60,6 +60,7 @@ $(function(){
                       <option value="{{ $v['id']}}">{{ $v['ingredient']}}</option>
                       @endforeach
                     </select>
+                    <p></p>
                     <p>食材名:<input type="text" name="ingredient" id="change_ingredient"></p>
                     <p>食品目分類:<select name="category" id="change_category">
                       <option value="糖質">糖質</option>

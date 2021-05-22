@@ -23,9 +23,6 @@ Auth::routes();
 
 Route::middleware('auth')->group(function() {
     Route::get('/main', 'MainController@index')->name('main');
-    Route::get('/ingredient', 'IngredientController@index')->name('ingredient');
-    Route::post('/ingredient', 'IngredientController@post');
-    Route::put('/ingredient', 'IngredientController@put');
     Route::get('/season', 'SeasonController@index')->name('season');
     Route::post('/season', 'SeasonController@post');
     Route::get('/dish', 'DishController@index')->name('dish');
@@ -37,4 +34,10 @@ Route::middleware('auth')->group(function() {
     Route::get('/menu', 'MenuController@index')->name('menu');
     Route::post('/menu', 'MenuController@post');
     Route::post('/ajax/obento', 'Ajax\AjaxObentoController@post');
+});
+
+Route::group(['middleware' => ['auth', 'can:admin']], function (){
+    Route::get('/ingredient', 'IngredientController@index')->name('ingredient');
+    Route::post('/ingredient', 'IngredientController@post');
+    Route::put('/ingredient', 'IngredientController@put');
 });
