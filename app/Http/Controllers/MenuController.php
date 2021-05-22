@@ -44,7 +44,7 @@ class MenuController extends Controller
                 $manage_dishes = Manage_dish::where('obentos_id', $v->id)->get();
                 $dishes = [];
                 foreach($colors as $c) {
-                    $fl_{$c} = 0;
+                    ${$c} = 0;
                 }
                 foreach($manage_dishes as $w) {
                     $dishes_db = Dish::find($w->dishes_id);
@@ -54,7 +54,7 @@ class MenuController extends Controller
                     foreach($colors as $c) {
                         $dish[$c] = $dishes_db->{$c};
                         if ($dishes_db->{$c} == 1) {
-                            $fl_{$c} = 1;
+                            ${$c} = 1;
                         }
                     }
                     $dishes[] = $dish;
@@ -65,7 +65,7 @@ class MenuController extends Controller
                 $obento['photo'] = $v->photo;
                 $obento['dishes'] = $dishes; 
                 foreach($colors as $c) {
-                    $obento[$c] = $fl_{$c};
+                    $obento[$c] = ${$c};
                 }
                 $obentos_data[] = $obento;
             }

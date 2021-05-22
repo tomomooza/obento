@@ -1,11 +1,95 @@
 @extends('layouts.app')
 <style>
-  .p_dishes_ingredients {
+  .p_0 {
     margin-bottom: 0;
   }
-  #pic {
+  .pic {
     height: 180px;
   }
+  .ly_inline {
+    display: inline-block;
+  }
+
+ /* colorSetting */
+.white {
+  border: solid 1px black;
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.pink {
+  border: solid 1px pink;
+  background-color: white;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.red {
+  border: solid 1px black;
+  background-color: red;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.green {
+  border: solid 1px black;
+  background-color: green;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.yellowish_green {
+  border: solid 1px black;
+  background-color: lawngreen;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.yellow {
+  border: solid 1px black;
+  background-color: yellow;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.beige {
+  border: solid 1px black;
+  background-color: wheat;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.orange {
+  border: solid 1px black;
+  background-color: orange;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.brown {
+  border: solid 1px black;
+  background-color: saddlebrown;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.purple {
+  border: solid 1px black;
+  background-color: purple;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.black {
+  border: solid 1px black;
+  background-color: black;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+
 </style>
 <script src="/js/app.js"></script>
 <script>
@@ -65,60 +149,61 @@ $(function(){
             @foreach($obentos_data as $obento)
             <p></p>
             <div class="card">
-                <div class="card-header">お弁当の登録</div>
+                <div class="card-header">お弁当の日付:　<span>{{date('Y年n月j日', strtotime($obento['obento_date']))}}</span></div>
 
                 <div class="card-body">
                   
-                    <p>お弁当の日付:　<span>{{date('Y年n月j日', strtotime($obento['obento_date']))}}</span></p>
-                    <p>
-                      <p>色合い</p>
-                      <p>
+                    
+                    <p class="ly_inline mb-0">色合い:　
                           @if ($obento['white'] == 1) 
-                            白　
+                            <div class="white"></div>白　
                           @endif
                           @if ($obento['pink'] == 1) 
-                            桃色　
+                            <div class="pink"></div>桃色　
                           @endif
                           @if ($obento['red'] == 1) 
-                            赤　
+                            <div class="red"></div>赤　
                           @endif
                           @if ($obento['green'] == 1) 
-                            緑　
+                            <div class="green"></div>緑　
                           @endif
                           @if ($obento['yellowish_green'] == 1) 
-                            黄緑　
+                            <div class="yellowish_green"></div>黄緑　
                           @endif
                           @if ($obento['yellow'] == 1) 
-                            黄　
+                            <div class="yellow"></div>黄　
                           @endif
                           @if ($obento['beige'] == 1) 
-                            薄橙色　
+                            <div class="beige"></div>薄橙色　
                           @endif
                           @if ($obento['orange'] == 1) 
-                            橙色　
+                            <div class="orange"></div>橙色　
                           @endif
                           @if ($obento['brown'] == 1) 
-                            茶　
+                            <div class="brown"></div>茶　
                           @endif
                           @if ($obento['purple'] == 1) 
-                            紫　
+                            <div class="purple"></div> 紫　
                           @endif
                           @if ($obento['black'] == 1) 
-                            黒　
+                            <div class="black"></div>黒　
                           @endif    
                     </p>
+                      <p class="mb-0">お料理</p>
+                      @foreach($obento['dishes'] as $d)
+                      <div class="row">
+                        <div class="col">・{{$d['dish_name']}}</div>
+                        <div class="col-6">{{$d['seasoning']}}</div>
+                      </div>
+                      @endforeach
                     <p>
-                      <p>お料理</p>
-                      <div id="obento_dish"></div>
+                      <p class="mb-0">写真</p>
+                      @if($obento['photo']!='')
+                      <div><img class="pic" src="{{$obento['photo']}}"></div>
+                      @endif
                     </p>
-                    <p>
-                      <p>写真</p>
-                      <div><img id="pic"></div>
-                    </p>
-                    <p>
-                      <p>お弁当メモ</p>
-                      <p><textarea name="obento_memo" id="obento_memo" rows="3" cols="40" disabled="disabled"></textarea></p>
-                    </p>
+                      <p class="mb-0">お弁当メモ</p>
+                      <p class="mb-0"><textarea name="obento_memo" id="obento_memo" rows="3" cols="40" disabled="disabled">{{$obento['memo']}}</textarea></p>
                 </div>
             </div>
             @endforeach
