@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header">obento</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,6 @@
                         </div>
                     @endif
 
-                    obentoシステムにログインしました!
                     <p><a href="menu"><input type="button" value="お弁当メニュー表"></a></p>
                     <p><a href="obento"><input type="button" value="お弁当登録"></a></p>
                     <p><a href="dish"><input type="button" value="お料理登録"></a></p>
