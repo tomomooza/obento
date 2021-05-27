@@ -7,7 +7,7 @@
     height: 180px;
   }
 </style>
-<script src="/js/app.js"></script>
+<script src="./js/app.js"></script>
 <script>
 $(function(){
   const ingredients = @json($ingredients_data);
@@ -44,7 +44,7 @@ $(function(){
       },
       body: formData,
     }
-    fetch('/ajax/obento', param)
+    fetch('./ajax/obento', param)
     .then(response => response.json())
     .then(result =>{
       console.log(result);
@@ -219,7 +219,7 @@ $(function(){
       },
       body: formData,
     }
-    fetch('/ajax/dish', param)
+    fetch('./ajax/dish', param)
     .then(response => response.json())
     .then(result=> {
       if (result.length == 0) {
@@ -246,7 +246,7 @@ $(function(){
       },
       body: formData,
     }
-    fetch('/ajax/dish', param)
+    fetch('./ajax/dish', param)
     .then(response => response.json())
     .then(result => {
       $('#dish_name').val(result['dish_name']);
@@ -353,7 +353,7 @@ $(function(){
                   <form id="obentos_date_form">
                     <input type="hidden" id="hidden_date" name="obento_date" value="">
                   </form>
-                  <form action="/obento" method="POST" enctype="multipart/form-data">
+                  <form action="./obento" method="POST" enctype="multipart/form-data">
                   @csrf
                     <p>お弁当の日付:<input type="date" name="obento_date" id="obento_date"></p>
                     <p>
@@ -501,7 +501,7 @@ $(function(){
             </div>
             <p></p>
             
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
+            <div class="text-right"><a href="./main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>

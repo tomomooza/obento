@@ -91,7 +91,7 @@
 
 
 </style>
-<script src="/js/app.js"></script>
+<script src="./js/app.js"></script>
 <script>
 $(function(){
   const obentos = @json($obentos_data);
@@ -124,7 +124,7 @@ $(function(){
             @endisset
 
             <div>
-              <form action="/menu" method="post">
+              <form action="./menu" method="post">
                 @csrf
                 年月を選択して下さい:
                 <select id="year" name="year"></select>年　
@@ -209,7 +209,7 @@ $(function(){
             @endforeach
             <p></p>
 
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
+            <div class="text-right"><a href="./main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>

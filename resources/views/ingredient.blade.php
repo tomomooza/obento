@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-<script src="/js/app.js"></script>
+<script src="./js/app.js"></script>
 <script>
 const ingredients = @json($ingredients_data);
 $(function(){
@@ -79,7 +79,7 @@ $(function(){
             </div>
 
             <p></p>
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
+            <div class="text-right"><a href="main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>

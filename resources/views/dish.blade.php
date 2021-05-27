@@ -4,7 +4,7 @@
     margin-bottom: 0;
   }
 </style>
-<script src="/js/app.js"></script>
+<script src="./js/app.js"></script>
 <script>
 $(function(){
   $('.abled').prop('disabled', true);
@@ -150,7 +150,7 @@ $(function(){
       },
       body: formData,
     }
-    fetch('/ajax/dish', param)
+    fetch('./ajax/dish', param)
     .then(response => response.json())
     .then(result=> {
       if (result.length == 0) {
@@ -177,7 +177,7 @@ $(function(){
       },
       body: formData,
     }
-    fetch('/ajax/dish', param)
+    fetch('./ajax/dish', param)
     .then(response => response.json())
     .then(result => {
       $('#dish_name').val(result['dish_name']);
@@ -344,7 +344,7 @@ $(function(){
                 <div class="card-header">お料理の表示・登録</div>
 
                 <div class="card-body">
-                    <form method="post" action="/dish" id="dish_post">
+                    <form method="post" action="./dish" id="dish_post">
                     @csrf
                     <p>
                       お料理名:<input type="text" name="dish_name" id="dish_name" class="abled">
@@ -465,7 +465,7 @@ $(function(){
             </div>
             <p></p>
             
-            <div class="text-right"><a href="/main"><input type="button" value="メイン画面に戻る" class=""></a></div>
+            <div class="text-right"><a href="./main"><input type="button" value="メイン画面に戻る" class=""></a></div>
         </div>
     </div>
 </div>
