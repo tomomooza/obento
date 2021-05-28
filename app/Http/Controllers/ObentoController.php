@@ -111,7 +111,7 @@ class ObentoController extends Controller
             $path = 'img/' . Auth::user()->id . '/' . $filename . '.jpg';
             //アップロードされた画像を保存する
             if (!Storage::disk('public')->exists('img/'. Auth::user()->id)) {
-                Strage::disk('public')->makeDirectory('img/'.Auth::user()->id, 0775, true);
+                Storage::disk('public')->makeDirectory('img/'.Auth::user()->id, 0775, true);
             }
             $filesave = $resize->save(storage_path('app/public/' . $path));
             //画像の保存に成功したらDBに記録する
