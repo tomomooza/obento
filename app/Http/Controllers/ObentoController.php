@@ -10,7 +10,7 @@ use App\Obento;
 use App\Manage_dish;
 use Illuminate\Support\Facades\DB;
 use InterventionImage;
-use Illuminate\Support\Facades\Storage:
+use Illuminate\Support\Facades\Storage;
 
 class ObentoController extends Controller
 {
