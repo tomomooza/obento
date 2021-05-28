@@ -10,6 +10,7 @@ use App\Obento;
 use App\Manage_dish;
 use Illuminate\Support\Facades\DB;
 use InterventionImage;
+use Illuminate\Support\Facades\Storage:
 
 class ObentoController extends Controller
 {
@@ -109,6 +110,9 @@ class ObentoController extends Controller
             $filename = md5($request->obento_date . $resize->__toString());
             $path = 'img/' . Auth::user()->id . '/' . $filename . '.jpg';
             //アップロードされた画像を保存する
+            if (!Storage::disk('public')->exists('img/'. Auth::user()->id)) {
+                Strage::disk('public')->makeDirectory('img/'.Auth::user()->id, 0775, true);
+            }
             $filesave = $resize->save(storage_path('app/public/' . $path));
             //画像の保存に成功したらDBに記録する
             if($filesave) {
