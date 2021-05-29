@@ -117,7 +117,6 @@ class DishController extends Controller
                 return redirect()->action('DishController@index');
             }
             $dishes_db = Dish::find($request->dishes_id);
-            Manage_ingredient::where('dishes_id', $request->dish_id)->delete();
         } else {
             //新規登録
             $dishes_db = Dish::where('user_id', Auth::user()->id)->where('dish_name', $request->dish_name)->first();
