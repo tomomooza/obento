@@ -154,7 +154,7 @@ $(function(){
     .then(response => response.json())
     .then(result=> {
       if (result.length == 0) {
-        $('#selection_dish').html('<option value="">検索結果はありませんでした</option>');
+        $('#select_dish').html('<option value="">検索結果はありませんでした</option>');
       } else {
         $('#select_dish').html('<option value="">お料理を選択して下さい</option>');
         for (let i = 0; i < result.length; i++) {
