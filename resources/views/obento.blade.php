@@ -328,9 +328,6 @@ $(function(){
     });
   });
 
-  $('#bt_add_dish').click(function(){
-
-  });
 });
 </script>
 
