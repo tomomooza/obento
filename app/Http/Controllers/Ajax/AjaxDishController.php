@@ -89,40 +89,62 @@ class AjaxDishController extends Controller
 
     function put(Request $request)
     {
-        $dishes_db = Dish::find($request->dishes_id);
-        $manage_ingredients_db = Manage_ingredient::where('dishes_id', $dishes_db->id)->get();
-        $manage_ingredients_data = [];
-        foreach ($manage_ingredients_db as $v) {
-            $manage_ingredients_data[] = $v['ingredients_id'];
+        $dishes_data = [];
+        if($request->filled('dishes_id') && $request->dishes_id != '') {
+            $dishes_db = Dish::find($request->dishes_id);
+            $manage_ingredients_db = Manage_ingredient::where('dishes_id', $dishes_db->id)->get();
+            $manage_ingredients_data = [];
+            foreach ($manage_ingredients_db as $v) {
+                $manage_ingredients_data[] = $v['ingredients_id'];
+            }
+
+            if (Auth::user()->id == $dishes_db->user_id) {
+                $dishes_data ['mydish'] = '1';
+                $dishes_data['author_name'] = Auth::user()->name;
+                $dishes_data['dishes_id'] = $dishes_db->id;
+            } else {
+                $dishes_data['mydish'] = '0';
+                $dishes_data['author_name'] = User::find($dishes_db->user_id)->name;
+                $dishes_data['dishes_id'] = '';
+            }
+            $dishes_data['dish_name'] = $dishes_db->dish_name;
+            $dishes_data['seasoning'] = $dishes_db->seasoning;
+            $dishes_data['memo'] = $dishes_db->memo;
+            $dishes_data['public_private'] = $dishes_db->public_private;
+            $dishes_data['white'] = $dishes_db->white;
+            $dishes_data['pink'] = $dishes_db->pink;
+            $dishes_data['red'] = $dishes_db->red;
+            $dishes_data['green'] = $dishes_db->green;
+            $dishes_data['yellowish_green'] = $dishes_db->yellowish_green;
+            $dishes_data['yellow'] = $dishes_db->yellow;
+            $dishes_data['beige'] = $dishes_db->beige;
+            $dishes_data['orange'] = $dishes_db->orange;
+            $dishes_data['brown'] = $dishes_db->brown;
+            $dishes_data['purple'] = $dishes_db->purple;
+            $dishes_data['black'] = $dishes_db->black;
+            $dishes_data['manage_ingredients'] = $manage_ingredients_data;
+        } else {
+            $dishes_data['mydish'] = '';
+                $dishes_data['author_name'] = ''; 
+                $dishes_data['dishes_id'] = '';
+                $dishes_data['dish_name'] = '';
+                $dishes_data['seasoning'] = '';
+                $dishes_data['memo'] = '';
+                $dishes_data['public_private'] = '';
+                $dishes_data['white'] = '';
+                $dishes_data['pink'] = '';
+                $dishes_data['red'] = '';
+                $dishes_data['green'] = '';
+                $dishes_data['yellowish_green'] = '';
+                $dishes_data['yellow'] = '';
+                $dishes_data['beige'] = '';
+                $dishes_data['orange'] = '';
+                $dishes_data['brown'] = '';
+                $dishes_data['purple'] = '';
+                $dishes_data['black'] = '';
+                $dishes_data['manage_ingredients'] = [];
         }
 
-        $dishes_data = [];
-        if (Auth::user()->id == $dishes_db->user_id) {
-            $dishes_data ['mydish'] = '1';
-            $dishes_data['author_name'] = Auth::user()->name;
-            $dishes_data['dishes_id'] = $dishes_db->id;
-        } else {
-            $dishes_data['mydish'] = '0';
-            $dishes_data['author_name'] = User::find($dishes_db->user_id)->name;
-            $dishes_data['dishes_id'] = '';
-        }
-        $dishes_data['dish_name'] = $dishes_db->dish_name;
-        $dishes_data['seasoning'] = $dishes_db->seasoning;
-        $dishes_data['memo'] = $dishes_db->memo;
-        $dishes_data['public_private'] = $dishes_db->public_private;
-        $dishes_data['white'] = $dishes_db->white;
-        $dishes_data['pink'] = $dishes_db->pink;
-        $dishes_data['red'] = $dishes_db->red;
-        $dishes_data['green'] = $dishes_db->green;
-        $dishes_data['yellowish_green'] = $dishes_db->yellowish_green;
-        $dishes_data['yellow'] = $dishes_db->yellow;
-        $dishes_data['beige'] = $dishes_db->beige;
-        $dishes_data['orange'] = $dishes_db->orange;
-        $dishes_data['brown'] = $dishes_db->brown;
-        $dishes_data['purple'] = $dishes_db->purple;
-        $dishes_data['black'] = $dishes_db->black;
-        $dishes_data['manage_ingredients'] = $manage_ingredients_data;
-        
         return response()-> json($dishes_data);
     }
 }

@@ -28,7 +28,6 @@ $(function(){
     'purple',
     'black',
   ];
-  $('.abled').prop('disabled', true);
   $('#selected_dish').hide();
   $('#hidden_date').val(obento_date);
   $('#obento_date').val(obento_date);
@@ -223,7 +222,7 @@ $(function(){
     .then(response => response.json())
     .then(result=> {
       if (result.length == 0) {
-        $('#selection_dish').html('<option value="">検索結果はありませんでした</option>');
+        $('#select_dish').html('<option value="">検索結果はありませんでした</option>');
       } else {
         $('#select_dish').html('<option value="">お料理を選択して下さい</option>');
         for (let i = 0; i < result.length; i++) {
@@ -249,6 +248,10 @@ $(function(){
     fetch('./ajax/dish', param)
     .then(response => response.json())
     .then(result => {
+      if (result['mydish'] == '') {
+        $('#selected_dish').hide();
+        return;
+      }
       $('#dish_name').val(result['dish_name']);
       $('#author_name').text(result['author_name']);
       if (result['white'] == '1') {
@@ -308,19 +311,9 @@ $(function(){
       }
       $('#seasoning').val(result['seasoning']);
       $('#dishes_memo').val(result['memo']);
-      if (result['mydish'] == '1') {
-        if (result['public_private'] == '1') {
-          $('input[name=public_private]:eq(1)').prop('checked', true);
-        }
-        $('#bt_change_submit').show();
-      } else {
-        $('#bt_change_submit').hide();
-      }
       $('#selected_dishes_id').val(result['dishes_id']);
       dishes_ingredients_list = result['manage_ingredients'];
       make_dishes_list();
-      $('.abled').prop('disabled', true);
-      $('#bt_change').prop('disabled', false);
       $('#selected_dish').show();
     })
     .catch((error) => {

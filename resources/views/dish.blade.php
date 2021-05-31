@@ -242,6 +242,8 @@ $(function(){
       if (result['mydish'] == '1') {
         if (result['public_private'] == '1') {
           $('input[name=public_private]:eq(1)').prop('checked', true);
+        } else {
+          $('input[name=public_private]:eq(0)').prop('checked', true);
         }
         $('#bt_change_submit').show();
       } else {
