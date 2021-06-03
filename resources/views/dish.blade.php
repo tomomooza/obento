@@ -324,6 +324,7 @@ $(function(){
                           <option value="甘味">甘味</option>
                           <option value="甘辛い">甘辛い</option>
                           <option value="甘酸っぱい">甘酸っぱい</option>
+                          <option value="酸味">酸味</option>
                           <option value="苦味">苦味</option>
                           <option value="辛味">辛味</option>
                           <option value="味噌味">味噌味</option>
@@ -380,6 +381,7 @@ $(function(){
                           <option value="甘味">甘味</option>
                           <option value="甘辛い">甘辛い</option>
                           <option value="甘酸っぱい">甘酸っぱい</option>
+                          <option value="酸味">酸味</option>
                           <option value="苦味">苦味</option>
                           <option value="辛味">辛味</option>
                           <option value="味噌味">味噌味</option>
